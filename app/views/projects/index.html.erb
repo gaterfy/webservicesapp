@@ -1,0 +1,100 @@
+<div>
+  just test
+
+  <%= form_with url: "/users/login", local: true do |f| %>
+    <%= f.label(:search, "Orga") %>
+
+    <%= f.text_field(:name, required: true, id:'search-user') %>
+    <%= f.submit "valider", {id:"send-button", class:"custom-submit"} %>
+  <% end %>
+
+  <div id="users-list">
+  </div>
+
+  <div id="info-users">
+    <div>
+      bio : <span id="bio-user"> </span>
+            <span id="name-user"></span>
+            <img id="img-user" width="80px" height="100px"/>
+    </div>
+    <div>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+  const memberList = document.getElementById('users-list');
+  var tab;
+  document.getElementById("send-button").addEventListener("click", function(event){
+      var name = $("#search-user").val();
+      event.preventDefault();
+      ajaxMember(name);
+});
+      //document.getElementByClass("send-button").addEventListener(
+
+    function ajaxMember(user){
+      $.ajax({
+        url: "https://api.github.com/orgs/"+user+"/members",
+        type: "GET",
+        data: {},
+        success: function(data) {
+          console.log(data);
+          tab=data;
+          build_all_users(data);
+        },
+        error: function(data) {
+          console.log("error");
+        }
+      });
+    }
+
+    function ajaxUser(user){
+      $.ajax({
+        url: "https://api.github.com/users/"+user,
+        type: "GET",
+        data: {},
+        success: function(data) {
+          console.log(data);
+          //build_all_users(data);
+          console.log("bio",data.bio);
+          $("#bio-user").html(data.bio);
+          $("#img-user").attr("src", data.avatar_url);
+        },
+        error: function(data) {
+          console.log("error");
+        }
+      });
+    }
+
+    function ajaxStaredUser(){
+      //recup the custom json
+    }
+
+    function build_all_users(tab){
+      for (const member of tab){
+        const li = document.createElement('li');
+        li.appendChild(document.createTextNode(member.login));
+        li.setAttribute("class", "user");
+        li.addEventListener("click", build_user_info);
+
+        memberList.appendChild(li);
+      }
+    }
+
+    function findUser(user){
+      for (const member of tab){
+        if(user===member.login){
+          return member.json;
+        }
+      }
+    }
+    function build_user_info(user){
+      var data = ajaxUser(user.target.innerText);
+    }
+
+
+
+
+</script>
