@@ -12,7 +12,7 @@ gem 'rails', '~> 5.2.2'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3', '~> 1.3.6'
 # Use Puma as the app server
-gem 'puma', '~> 3.11'
+gem 'puma', '~> 3.12'
 #for table sorter
 #gem 'jquery-tablesorter'
 gem 'font-roboto-rails', '~> 0.0.2'
